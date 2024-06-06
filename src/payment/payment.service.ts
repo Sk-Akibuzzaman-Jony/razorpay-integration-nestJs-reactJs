@@ -81,7 +81,7 @@ export class PaymentService {
       resData.message = 'Bad request';
       return resData;
     }
-
+    
     try {
       let isValid = false;
       let hashData = '';

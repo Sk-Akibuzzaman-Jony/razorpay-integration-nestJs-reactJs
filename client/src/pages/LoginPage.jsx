@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate(); 
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/payment');
+    }
+  }, [navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,6 +26,7 @@ const LoginPage = () => {
       if (response.data && response.data.access_token) {
         localStorage.setItem('token', response.data.access_token);
         console.log('Login successful, token stored.');
+        navigate('/payment');
       } else {
         console.error('No token received.');
       }

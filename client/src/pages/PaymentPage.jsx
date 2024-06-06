@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { displayRazorpay } from '../operations/PaymentAPI';
 
@@ -7,6 +8,14 @@ const PaymentPage = () => {
   const [transferAccount, setTransferAccount] = useState('');
   const [transferAmount, setTransferAmount] = useState(0);
   const [subscriptionDuration, setSubscriptionDuration] = useState(6);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      navigate('/');
+    }
+  }, [navigate]);
 
   const handlePayment = () => {
     if (amount <= 0) {
@@ -28,8 +37,20 @@ const PaymentPage = () => {
     displayRazorpay(amount, false, 0, true, transferAccount, transferAmount);
   };
 
+  const handleSignOut = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 space-x-4">
+      <button
+        onClick={handleSignOut}
+        className="absolute top-4 right-4 px-4 py-2 text-white bg-red-500 rounded hover:bg-red-700 focus:outline-none focus:bg-red-700"
+      >
+        Sign Out
+      </button>
+
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded shadow-md">
         <h2 className="text-2xl font-bold text-center">One-Time Payment</h2>
         <div className="mt-8 space-y-6">

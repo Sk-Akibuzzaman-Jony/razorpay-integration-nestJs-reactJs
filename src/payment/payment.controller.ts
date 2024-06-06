@@ -48,7 +48,8 @@ export class PaymentController {
       razorpay_payment_id,
       razorpay_subscription_id,
     } = req.body;
-
+    //console.log(req.body);
+    
     try {
       const verificationResult = await this.paymentService.verifyPayment(
         order_uuid,
